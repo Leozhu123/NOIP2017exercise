@@ -31,13 +31,16 @@ function MyDiff()
     let &shellxquote=l:shxq_sav
   endif
 endfunction
-set autoindent  //自动缩进
-set cindent  //C自动缩进
-set shiftwidth=2 //自动缩进空白字符个数
-set softtabstop=2 //tab键的一个制表符
-set tabstop=2 //tab键的空格数
+set autoindent  
+set cindent  
+set shiftwidth=2 
+set softtabstop=2
+set tabstop=2
 set nu 
 cd D:\ciwomuli
 set noundofile
 set nobackup
 set noswapfile
+:set ts=4
+:set expandtab
+:%retab!
