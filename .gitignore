@@ -1,7 +1,2 @@
-*.swm
-*.swn
-*.swo
-*.swp
-*.exe
-*.o
-*.bak
+!*.pas
+!_vimrc
