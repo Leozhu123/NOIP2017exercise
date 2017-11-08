@@ -8,20 +8,14 @@ begin
   for i:=1 to 10 do
     read(v[i]);
   for i:=1 to 10 do
-  begin
     v[i]:=v[i]-cost[i];
-   // write(v[i]:4);
-  end;
-  writeln;
   for i:=1 to 10 do
   begin
     for j:=1 to need do
     begin
       if j<i then dp[i,j]:=dp[i-1,j] else
-      dp[i,j]:=max(dp[i-1,j],dp[i,j-i]+v[i]);
-   //   write(dp[i,j]:4);
+      if dp[i-1,j]>dp[i,j-i]+v[i] then dp[i,j]:=dp[i-1,j] else dp[i,j]:=dp[i,j-i]+v[i];
     end;
-   // writeln;
   end;
   writeln(dp[10,need]);
 end.
