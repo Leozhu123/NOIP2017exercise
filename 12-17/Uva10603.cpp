@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cstring>
 #include <cstdio>
+#include <vector>
 using namespace std;
 struct Node{
     int v[3],dist;
@@ -26,12 +27,12 @@ void solve(int a,int b,int c,int d){
     start.dist=0;
     start.v[0]=0;start.v[1]=0;start.v[2]=c;
     priority_queue<Node> q;
+    vis[0][0]=true;
     q.push(start);
     while (!q.empty()){
         Node u=q.top();
         q.pop();
         update_ans(u);
-        vis[0][0]=true;
         if (ans[d]>=0) break;
         for (int i=0;i<3;i++){
             for (int j=0;j<3;j++){
