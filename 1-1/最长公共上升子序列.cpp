@@ -1,12 +1,15 @@
 #include<cmath>
 #include<cstdio>
 #include<cstring>
+#include <algorithm>
+using namespace std;
 const int qq=505;
 int a[qq],b[qq];
 int dp[qq][qq];
 int prex[qq][qq];
 int prey[qq][qq];
-int count,ans;
+int ans;
+int count1;
 void out(int x,int y)    //递归输出路径、 
 {
     if(dp[x][y]==0)    return;
@@ -15,8 +18,8 @@ void out(int x,int y)    //递归输出路径、
     out(xx,yy);
     if(dp[x][y]!=dp[xx][yy] && y!=0){
         printf("%d",b[y]);
-        count++;
-        if(count<ans)    printf(" ");
+        count1++;
+        if(count1<ans)    printf(" ");
         else            printf("\n");
     }
 }
@@ -38,7 +41,7 @@ int main()
             int maxn=0;
             int x,y;x=y=0;
             for(j=1;j<=m;++j){
-                dp[i][j]=dp[i-1][j];        //先更新状态，如果后面会更新的话再去更新 
+                dp[i][j]=max(dp[i-1][j],dp[i][j-1]);        //先更新状态，如果后面会更新的话再去更新 
                 prex[i][j]=i-1;
                 prey[i][j]=j;
                 if(a[i]>b[j] && maxn<dp[i-1][j]){    //我开始一直没想通为什么要在a[i]>b[j]的时候才更新值 
@@ -63,7 +66,7 @@ int main()
         }
         printf("%d\n",ans);
         int x=n,y=flag;
-        count=0;
+        count1=0;
         if(ans>0)
             out(x,y);
         if(t)    printf("\n");
