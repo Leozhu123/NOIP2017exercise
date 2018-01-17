@@ -4,9 +4,9 @@
 #include <algorithm>
 #include <iostream>
 using namespace std; 
-const int maxn=5005,INF=(1<<31)-1;
+const int maxn=10005,INF=(1<<31)-1;
 bool G[maxn][maxn],vis[maxn];
-int p[maxn],n,m,dp[maxn][2];
+int p[maxn],n,dp[maxn];
 vector<int> sons[maxn],gsons[maxn];
 void BFS(int root){
   queue<int> q;
@@ -28,25 +28,24 @@ void BFS(int root){
   }
 }  
 int dps(int x){
-  if (dp[x][0]) return max(dp[x][0],dp[x][1]);
-  dp[x][0]=dp[x][1]=-INF;
+  if (dp[x]) dp[x];
+  dp[x]-INF;
   int ans=0;
   for (int i=0;i<sons[x].size();i++)
     ans+=dps(sons[x][i]);
-  dp[x][0]=ans;
+  dp[x]=ans;
   ans=0;
   for (int i=0;i<gsons[x].size();i++)
     ans+=dps(gsons[x][i]);
   ans++;
-  dp[x][1]=ans;
-  return max(dp[x][0],dp[x][1]);
+  dp[x]=max(dp[x],ans);
+  return dp[x];
 }  
 int main(){
-  cin>>n;
-  m=n-1;
-  for (int i=0;i<m;i++){
+  scanf("%d",&n);
+  for (int i=0;i<n-1;i++){
     int u,v;
-    cin>>u>>v;
+    scanf("%d%d",&u,&v);
     G[u][v]=1;
     G[v][u]=1;
   }  
