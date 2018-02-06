@@ -5,7 +5,7 @@
 #include <queue>
 #include <cstring>
 const int maxn=10005;
-const int INF=1<<31-1;
+const int INF=(1<<31)-1;
 using namespace std;
 struct Edge{
     int from,to,cap,flow;
@@ -13,7 +13,7 @@ struct Edge{
         this->from=from;
         this->to=to;
         this->cap=cap;
-        this->flow=flow;
+        this->flow=0;
     }
 };
 struct ISAP{
