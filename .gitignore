@@ -1,5 +1,3 @@
-!*.pas
-!_vimrc
 *.exe
 *.o
 *.bak
