@@ -61,9 +61,54 @@ inline void build(Node &curr, int l, int r)
     build(curr.right(), mid + 1, r);
     getup(curr);
 }
-
+inline void modify(Node &curr, int l, int r, int d)
+{
+    if (curr.out(l, r))
+        return;
+    if (curr.covered(l, r))
+    {
+        curr.sum += curr.size() * d;
+        curr.delta += d;
+        return;
+    }
+    pushdown(curr);
+    modify(curr.left(), l, r, d);
+    modify(curr.right(), l, r, d);
+    getup(curr);
+}
+inline int querysum(Node &curr, int l, int r)
+{
+    if (curr.out(l, r))
+        return 0;
+    if (curr.covered(l, r))
+        return curr.sum;
+    pushdown(curr);
+    return querysum(curr.left(), l, r) + querysum(curr.right(), l, r);
+}
 int n, m;
+
 int main()
 {
     cin >> n >> m;
+    for (int i = 1; i <= n; ++i)
+        cin >> a[i];
+    build(root, 1, n);
+    while (m--)
+    {
+        int q;
+        cin >> q;
+        int x, y;
+        cin >> x >> y;
+        if (q == 1)
+        {
+            int d;
+            cin >> d;
+            modify(root, x, y, d);
+        }
+        else
+        {
+            cout << querysum(root, x, y) << endl;
+        }
+    }
+    return 0;
 }
