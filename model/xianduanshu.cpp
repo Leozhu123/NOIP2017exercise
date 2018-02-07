@@ -40,6 +40,7 @@ inline void pushdown(Node &curr)
         curr.right().sum += curr.right().size() * curr.delta;
         curr.left().delta += curr.delta;
         curr.right().delta += curr.delta;
+        curr.delta = 0;
     }
 }
 inline void getup(Node &curr)
