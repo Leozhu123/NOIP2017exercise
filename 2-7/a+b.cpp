@@ -131,13 +131,7 @@ int main()
     int a, b;
     ISAP maxflow;
     cin >> a >> b;
-    if (a > 0)
-        maxflow.addEdge(1, 2, a);
-    else
-        maxflow.addEdge(2, 1, -a);
-    if (b > 0)
-        maxflow.addEdge(1, 2, b);
-    else
-        maxflow.addEdge(2, 1, -b);
+    maxflow.addEdge(1, 2, a);
+    maxflow.addEdge(1, 2, b);
     cout << maxflow.MaxFlow(1, 2, 2);
 }
