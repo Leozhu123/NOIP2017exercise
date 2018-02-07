@@ -4,17 +4,17 @@
 using namespace std;
 struct Node
 {
-    int lb, rb;
-    int sum, delta;
-    int lc, rc;
-    Node(int l = 0, int r = 0, int s = 0) : lb(l), rb(r), sum(s), delta(0), lc(0), rc(0) {}
-    int size() { return rb - lb + 1; }
+    long long lb, rb;
+    long long sum, delta;
+    long long lc, rc;
+    Node(long long l = 0, long long r = 0, long long s = 0) : lb(l), rb(r), sum(s), delta(0), lc(0), rc(0) {}
+    long long size() { return rb - lb + 1; }
     bool unique() { return lb == rb; }
-    bool out(int l, int r)
+    bool out(long long l, long long r)
     {
         return l > rb || r < lb;
     }
-    bool covered(int l, int r)
+    bool covered(long long l, long long r)
     {
         return l <= lb && rb <= r;
     }
@@ -22,7 +22,7 @@ struct Node
     Node &right();
 };
 Node segtree[400010];
-int a[100010], segend = 1;
+long long a[100010], segend = 1;
 Node &Node::left()
 {
     return segtree[lc];
@@ -47,7 +47,7 @@ inline void getup(Node &curr)
 {
     curr.sum = curr.left().sum + curr.right().sum;
 }
-inline void build(Node &curr, int l, int r)
+inline void build(Node &curr, long long l, long long r)
 {
     curr = Node(l, r, 0);
     if (curr.unique())
@@ -57,12 +57,12 @@ inline void build(Node &curr, int l, int r)
     }
     curr.lc = ++segend;
     curr.rc = ++segend;
-    int mid = (l + r) >> 1;
+    long long mid = (l + r) >> 1;
     build(curr.left(), l, mid);
     build(curr.right(), mid + 1, r);
     getup(curr);
 }
-inline void modify(Node &curr, int l, int r, int d)
+inline void modify(Node &curr, long long l, long long r, long long d)
 {
     if (curr.out(l, r))
         return;
@@ -77,7 +77,7 @@ inline void modify(Node &curr, int l, int r, int d)
     modify(curr.right(), l, r, d);
     getup(curr);
 }
-inline int querysum(Node &curr, int l, int r)
+inline long long querysum(Node &curr, long long l, long long r)
 {
     if (curr.out(l, r))
         return 0;
@@ -86,23 +86,23 @@ inline int querysum(Node &curr, int l, int r)
     pushdown(curr);
     return querysum(curr.left(), l, r) + querysum(curr.right(), l, r);
 }
-int n, m;
+long long n, m;
 
 int main()
 {
     cin >> n >> m;
-    for (int i = 1; i <= n; ++i)
+    for (long long i = 1; i <= n; ++i)
         cin >> a[i];
     build(root, 1, n);
     while (m--)
     {
-        int q;
+        long long q;
         cin >> q;
-        int x, y;
+        long long x, y;
         cin >> x >> y;
         if (q == 1)
         {
-            int d;
+            long long d;
             cin >> d;
             modify(root, x, y, d);
         }
