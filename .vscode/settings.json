@@ -18,12 +18,12 @@
 
     "clang.cflags": [ // 控制c语言静态检测的参数
         "--target=x86_64-w64-mingw",
-        "-std=c11",
+        //"-std=c11",
         "-Wall"
     ],
     "clang.cxxflags": [ // 控制c++静态检测时的参数
         "--target=x86_64-w64-mingw",
-        "-std=c++17",
+       // "-std=c++17",
         "-Wall"
     ],
     "clang.completion.enable":false // 效果稍好，但太卡，故关掉
