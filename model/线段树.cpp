@@ -83,3 +83,23 @@ int querySum(Node &curr, int l, int r)
     pushdown(curr);
     return querySum(curr.left(), l, r) + querySum(curr.right(), l, r);
 }
+int main() {
+    cin >> n >> m;
+    for (int i = 1; i <= n; ++i)
+        cin >> a[i];
+    build(root, 1, n);
+    while (m--) {
+        int q;
+        cin >> q;
+        int x, y;
+        cin >> x >> y;
+        if (q == 1) {
+            int d;
+            cin >> d;
+            modify(root, x, y, d);
+        } else {
+            cout << querySum(root, x, y) << endl;
+        }
+    }
+    return 0;
+}
