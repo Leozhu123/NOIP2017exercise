@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdio>
 using namespace std;
 struct Node{
     Node *lch,*rch;
@@ -89,11 +90,11 @@ int main(){
         cin>>x;
         if (x==1){
             long long a,b,c;
-            cin>>a>>b>>c;
+            scanf("%lld%lld%lld", &a, &b, &c);
             modify(root,a,b,c);
         }else if (x==2){
             long long x,y;
-            cin>>x>>y;
+            scanf("%lld%lld", &x,&y);
             cout<<qurry(root,x,y)<<endl;
         }
     }
