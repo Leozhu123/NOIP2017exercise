@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdio>
 using namespace std;
 const long long maxn = 300005;
 long long da[maxn];
