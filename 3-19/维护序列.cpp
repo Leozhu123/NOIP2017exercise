@@ -114,11 +114,12 @@ long long qurry(Node *curr, long long l, long long r)
 int main()
 {
     long long n, m;
-    cin >> n >> m >> mod;
+    cin >> n >> mod;
     for (long long i = 1; i <= n; i++)
     {
         cin >> a[i];
     }
+    cin >> m;
     build(root, 1, n);
     for (long long i = 0; i < m; i++)
     {
