@@ -86,39 +86,35 @@ void update(int rt, int l, int r, int L, int R, int c)
 int main()
 {
     int n, cas = 1;
-    while (scanf("%d", &n) != EOF)
+    double a, b, c, d;
+    int m = 0;
+    cin >> n;
+    for (int i = 0; i < n; i++)
     {
-        if (n == 0)
-            break;
-        double a, b, c, d;
-        int m = 0;
-        for (int i = 0; i < n; i++)
-        {
-            scanf("%lf %lf %lf %lf", &a, &b, &c, &d);
-            X[m] = a;
-            S[m++] = Seg(a, c, b, 1);
-            X[m] = c;
-            S[m++] = Seg(a, c, d, -1);
-        }
-        sort(S, S + m);
-        sort(X, X + m);
-        int k = 1;
-        for (int i = 1; i < m; i++)
-        {
-            if (X[i] != X[i - 1])
-                X[k++] = X[i];
-        }
-        memset(cover, 0, sizeof(cover));
-        memset(sum, 0, sizeof(sum));
-        double ans = 0;
-        for (int i = 0; i < m - 1; i++)
-        {
-            int l = b_search(S[i].l, k, X);
-            int r = b_search(S[i].r, k, X);
-            update(1, 0, k - 1, l, r, S[i].c);
-            ans += sum[1] * (S[i + 1].h - S[i].h);
-        }
-        printf("Test case #%d\nTotal explored area: %.2lf\n\n", cas++, ans);
+        scanf("%lf %lf %lf %lf", &a, &b, &c, &d);
+        X[m] = a;
+        S[m++] = Seg(a, c, b, 1);
+        X[m] = c;
+        S[m++] = Seg(a, c, d, -1);
     }
+    sort(S, S + m);
+    sort(X, X + m);
+    int k = 1;
+    for (int i = 1; i < m; i++)
+    {
+        if (X[i] != X[i - 1])
+            X[k++] = X[i];
+    }
+    memset(cover, 0, sizeof(cover));
+    memset(sum, 0, sizeof(sum));
+    double ans = 0;
+    for (int i = 0; i < m - 1; i++)
+    {
+        int l = b_search(S[i].l, k, X);
+        int r = b_search(S[i].r, k, X);
+        update(1, 0, k - 1, l, r, S[i].c);
+        ans += sum[1] * (S[i + 1].h - S[i].h);
+    }
+    printf("%.2lf", ans);
     return 0;
 }

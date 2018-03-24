@@ -69,6 +69,6 @@ int main()
 	LL ans=0;
 	for (long long i=1 ;i<=n;++i)
 		ans+=(LL)l[i]*r[i];
-	cout<<ans<<endl;
+	cout<<ans%666233<<endl;
 	return 0;
 } 
