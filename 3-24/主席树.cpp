@@ -30,12 +30,14 @@ void update(Node *curr, Node *pre, long long x)
     long long mid = (curr->l + curr->r) >> 1;
     if (x <= mid)
     {
+        delete curr->lch;
         curr->lch = new Node(0, curr->l, mid);
         curr->rch = pre->rch;
         update(curr->lch, pre->lch, x);
     }
     else
     {
+        delete curr->rch;
         curr->rch = new Node(0, mid + 1, curr->r);
         curr->lch = pre->lch;
         update(curr->rch, pre->rch, x);
@@ -60,7 +62,7 @@ long long n, q;
 long long num[maxn], num2[maxn];
 int main()
 {
-    scanf("%d %d", &n, &q);
+    cin>>n>>q;
     for (long long i = 1; i <= n; i++)
     {
         cin >> num[i];
@@ -79,6 +81,6 @@ int main()
     {
         long long x, y, z;
         cin >> x >> y >> z;
-        printf("%d\n", num2[query(root[x-1], root[y], z)]);
+        cout<<num2[query(root[x-1], root[y], z)]<<endl;
     }
 }
