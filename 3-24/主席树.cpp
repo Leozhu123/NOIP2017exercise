@@ -1,37 +1,84 @@
+#include <algorithm>
 #include <iostream>
+#include <cstdio>
 using namespace std;
-const int maxn = 210000;
+const long long maxn = 210000;
 struct Node
 {
-    int sum, l, r;
+    long long sum, l, r;
     Node *lch, *rch;
-    Node(int s, int l, int r) : sum(s), l(l), r(r)
+    Node(long long s, long long l, long long r) : sum(s), l(l), r(r)
     {
         lch = rch = 0;
     }
 };
 Node *root[maxn];
-void build(Node *&curr, int l, int r)
+void build(Node *&curr, long long l, long long r)
 {
     curr = new Node(0, l, r);
-    int mid = (l + r) >> 1;
-    if (l < r)
+    long long mid = (l + r) >> 1;
+    if (l == r)
+        return;
+    build(curr->lch, l, mid);
+    build(curr->rch, mid + 1, r);
+}
+void update(Node *curr, Node *pre, long long x)
+{
+    curr->sum = pre->sum + 1;
+    if (curr->l == curr->r)
+        return;
+    long long mid = (curr->l + curr->r) >> 1;
+    if (x <= mid)
     {
-        build(curr->lch, l, mid);
-        build(curr->rch, mid + 1, r);
+        curr->lch = new Node(0, curr->l, mid);
+        curr->rch = pre->rch;
+        update(curr->lch, pre->lch, x);
+    }
+    else
+    {
+        curr->rch = new Node(0, mid + 1, curr->r);
+        curr->lch = pre->lch;
+        update(curr->rch, pre->rch, x);
     }
 }
-void update(Node *curr,Node *pre,int x){
-    curr->sum=pre->sum+1;
-    if(l==r) return;
-    int mid=(curr->l+curr->r)>>1;
-    if (x<=mid){
-        curr->lch=new Node(0,curr->l,mid);
-        curr->rch=pre->rch;
-        update(curr->lch, pre->lch, x);
-    }else{
-        curr->rch=new Node(0,mid+1,curr->r);
-        curr->lch=pre->lch;
-        update(curr->rch, pre->rch, x);
+long long query(Node *st, Node *ed, long long x)
+{
+    if (st->l == st->r)
+        return st->l;
+
+    long long s = ed->lch->sum - st->lch->sum;
+    if (x <= s)
+    {
+        return query(st->lch, ed->lch, x);
+    }
+    else
+    {
+        return query(st->rch, ed->rch, x - s);
+    }
+}
+long long n, q;
+long long num[maxn], num2[maxn];
+int main()
+{
+    scanf("%d %d", &n, &q);
+    for (long long i = 1; i <= n; i++)
+    {
+        cin >> num[i];
+        num2[i] = num[i];
+    }
+    sort(num2 + 1, num2 + 1 + n);
+    long long size = unique(num2 + 1, num2 + n + 1) - (num2 + 1);
+    build(root[0], 1, size);
+    for (long long i = 1; i <= n; i++)
+    {
+        long long t = lower_bound(num2 + 1, num2 + 1 + size, num[i]) - num2;
+        root[i] = new Node(0, root[i - 1]->l, root[i - 1]->r);
+        update(root[i], root[i - 1], t);
+    }
+    for (long long i = 1; i <= q; i++)
+    {
+        long long x, y, z;
+        cin >> x >> y >> z;
+        printf("%d\n", num2[query(root[x-1], root[y], z)]);
     }
 }
