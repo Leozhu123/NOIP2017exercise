@@ -2,3 +2,5 @@
 *.o
 *.bak
 /.metadata/
+/.vscode/
+/.vscode-linux/
