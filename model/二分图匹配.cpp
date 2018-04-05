@@ -111,12 +111,11 @@ int main(){
     int s=1,t=n+m+2;
     for (int i=0;i<e;i++){
         int a,b,c;
-        scanf("%d%d",&a,&b);
-        if (b>m||a>n) continue;
+        cin>>a>>b;
+        if (b>m) continue;
         maxflow.addEdge(a+1,b+n+1,1);
     }
     for (int i=1;i<=n;i++) maxflow.addEdge(s,i+1,1);
     for (int i=1;i<=m;i++) maxflow.addEdge(i+n+1,t,1);
     cout<<maxflow.MaxFlow(s,t,n+m+2);
 }    
-    
