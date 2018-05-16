@@ -6,15 +6,22 @@ struct data{
 };
 const int maxn=500005,INF=(1<<31)-1;
 bool vis[maxn];
-int p[maxn],sp[maxn],n,m,root,ancestor[maxn];
+int p[maxn],sp[maxn],n,m,root,ancestor[maxn],siz[maxn];
 vector<int> G[maxn],que;
 vector<data> q[maxn];
-int find_set(int x){
+inline int find_set(int x){
     return x==sp[x]?sp[x]:sp[x]=find_set(sp[x]);
 }   
 inline int union_set(int x,int y){
     int px=find_set(x),py=find_set(y);
-        sp[px]=py;
+    if(siz[px]<siz[py]){
+        sp[px] = py;
+    }else{
+        sp[py]=px;
+        if(siz[px]==siz[py]){
+            siz[px]++;
+        }
+    }    
 }
 inline int read()
 {
