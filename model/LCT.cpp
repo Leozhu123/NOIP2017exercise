@@ -1,6 +1,7 @@
+#include <cstdio>
 #include <iostream>
 using namespace std;
-const long long maxn = 300005;
+const long long maxn = 10;
 long long da[maxn];
 struct SplayNode
 {
@@ -14,7 +15,7 @@ struct SplayNode
 		xo = 0;
 		this->idx = idx;
 	}
-	void update()
+	inline void update()
 	{
 		xo = 0;
 		if (lch)
@@ -23,7 +24,7 @@ struct SplayNode
 			xo ^= rch->xo;
 		xo = xo ^ da[idx];
 	}
-	void pushdown()
+	inline void pushdown()
 	{
 		if (isRev)
 		{
@@ -38,7 +39,7 @@ struct SplayNode
 		}
 		update();
 	}
-	void leftroute()
+	inline void leftroute()
 	{
 		SplayNode *y = father;
 		path_parent = y->path_parent;
@@ -61,7 +62,7 @@ struct SplayNode
 		y->update();
 		update();
 	}
-	void rightroute()
+	inline void rightroute()
 	{
 		SplayNode *y = father;
 		path_parent = y->path_parent;
@@ -84,14 +85,14 @@ struct SplayNode
 		y->update();
 		update();
 	}
-	void rev()
+	inline void rev()
 	{
 		isRev = !isRev;
 		pushdown();
 	}
 };
 SplayNode *location[maxn];
-void splay(SplayNode *x)
+inline void splay(SplayNode *x)
 {
 	while (x->father)
 	{
@@ -111,7 +112,7 @@ void splay(SplayNode *x)
 		}
 	}
 }
-void Access(SplayNode *p)
+inline void Access(SplayNode *p)
 {
 	splay(p);
 	p->pushdown();
@@ -143,7 +144,7 @@ void Access(SplayNode *p)
 	}
 	splay(p);
 }
-SplayNode *FindRoot(SplayNode *p)
+inline SplayNode *FindRoot(SplayNode *p)
 {
 	Access(p);
 	splay(p);
@@ -157,14 +158,14 @@ SplayNode *FindRoot(SplayNode *p)
 	p->pushdown();
 	return p;
 }
-void Evert(SplayNode *p)
+inline void Evert(SplayNode *p)
 {
 	Access(p);
 	splay(p);
 	p->rev();
 	p->pushdown();
 }
-void Cut(SplayNode *p, SplayNode *q)
+inline void Cut(SplayNode *p, SplayNode *q)
 {
 	Evert(p);
 	Access(q);
@@ -175,7 +176,7 @@ void Cut(SplayNode *p, SplayNode *q)
 	q->lch = 0;
 	q->update();
 }
-void Link(SplayNode *p, SplayNode *q)
+inline void Link(SplayNode *p, SplayNode *q)
 {
 	Evert(p);
 	splay(p);
@@ -189,13 +190,13 @@ void Link(SplayNode *p, SplayNode *q)
 	q->path_parent = 0;
 	p->pushdown();
 }
-void MakeTree(long long idx)
+inline void MakeTree(long long idx)
 {
 	SplayNode *p = new SplayNode(idx);
 	location[idx] = p;
 	p->xo = da[idx];
 }
-long long ask(SplayNode *p, SplayNode *q)
+inline long long ask(SplayNode *p, SplayNode *q)
 {
 	Evert(p);
 	splay(p);
@@ -205,7 +206,7 @@ long long ask(SplayNode *p, SplayNode *q)
 	q->pushdown();
 	return q->xo;
 }
-void change(long long idx, long long x)
+inline void change(long long idx, long long x)
 {
 	da[idx] = x;
 	SplayNode *cur = location[idx];
@@ -215,19 +216,19 @@ void change(long long idx, long long x)
 int main()
 {
 	long long n, m;
-	cin >> n >> m;
+	scanf("%lld%lld", &n, &m);
 	for (long long i = 1; i <= n; i++)
 	{
-		cin >> da[i];
+		scanf("%lld", &da[i]);
 		MakeTree(i);
 	}
 	for (long long i = 0; i < m; i++)
 	{
 		long long a, b, c;
-		cin >> a >> b >> c;
+		scanf("%lld%lld%lld", &a, &b, &c);
 		if (a == 0)
 		{
-			cout << ask(location[b], location[c]) << endl;
+			printf("%lld\n", ask(location[b], location[c]));
 		}
 		else if (a == 1)
 		{

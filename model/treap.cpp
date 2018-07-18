@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <cstdio>
 using namespace std;
 struct Node{
     long long x;
@@ -136,11 +137,11 @@ void succ(Node *curr,long long x){
 int main(){
 	srand(time(0));
     long long n;
-    cin>>n;
+    scanf("%ld", &n);
     for (long long i=0;i<n;i++){
         long long x,y;
         ans=null;
-        cin>>x>>y;
+        scanf("%ld%ld", &x,&y);
         switch(x){
             case 1:
                 insert(root,y);
@@ -149,20 +150,20 @@ int main(){
                 del(root,y);
                 break;
             case 3:
-                cout<<qurry(root,y)<<endl;
+                printf("%d\n",qurry(root,y));
                 break;
             case 4:
-                cout<<rankk(root,y)<<endl;
+                printf("%d\n",rankk(root,y));
                 break;
             case 5:
             	ans=null;
                 pred(root,y);
-                cout<<ans->x<<endl;
+                printf("%d\n",ans->x);
                 break;
             case 6:
             	ans=null; 
                 succ(root,y);
-                cout<<ans->x<<endl;
+                printf("%d\n",ans->x);
                 break;
         }
     }

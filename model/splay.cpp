@@ -26,12 +26,14 @@ struct Node
             ch[1]->mark = !ch[1]->mark;
             mark = false;
         }
-        sz=1;
-        if(ch[0]) sz+=ch[0]->sz;
-        if(ch[1]) sz+=ch[1]->sz;
+        sz = 1;
+        if (ch[0])
+            sz += ch[0]->sz;
+        if (ch[1])
+            sz += ch[1]->sz;
     }
 };
-Node *null=new Node;
+Node *null = new Node;
 Node *root = null;
 int date[maxn];
 inline bool which(Node *x)
@@ -76,11 +78,11 @@ Node *build_tree(Node *fa, int l, int r)
         return null;
     int mid = (l + r) >> 1;
     Node *now = new Node;
-    now->ch[0]=now->ch[1]=null;
+    now->ch[0] = now->ch[1] = null;
     now->fa = fa;
     now->x = date[mid];
     now->maintain();
-    now->ch[0] = build_tree(now, l, mid-1);
+    now->ch[0] = build_tree(now, l, mid - 1);
     now->ch[1] = build_tree(now, mid + 1, r);
     now->maintain();
     return now;
@@ -95,8 +97,8 @@ Node *find(int x)
         {
             now = now->ch[0];
         }
-        else 
-		{
+        else
+        {
             x -= now->ch[0]->sz + 1;
             if (!x)
                 return now;
@@ -115,13 +117,13 @@ void reverse(int x, int y)
 void dfs(Node *now)
 {
     now->maintain();
-    if (now->ch[0]!=null)
+    if (now->ch[0] != null)
         dfs(now->ch[0]);
     if (now->x != -INF && now->x != INF)
     {
         cout << now->x << " ";
     }
-    if (now->ch[1]!=null)
+    if (now->ch[1] != null)
         dfs(now->ch[1]);
 }
 int main()
@@ -133,7 +135,7 @@ int main()
     {
         date[i + 1] = i;
     }
-    root = build_tree(null,1, n + 2);
+    root = build_tree(null, 1, n + 2);
     for (int i = 1; i <= m; i++)
     {
         cin >> x >> y;
