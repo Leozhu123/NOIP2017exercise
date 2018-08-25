@@ -171,7 +171,7 @@ inline void Cut(SplayNode *p, SplayNode *q)
 	Access(q);
 	splay(q);
 	q->pushdown();
-	if (q->lch)
+	if (q->lch==p)
 		q->lch->father = 0;
 	q->lch = 0;
 	q->update();

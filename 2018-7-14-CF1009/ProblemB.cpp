@@ -27,7 +27,7 @@ int main()
                 str[i + 1] = str[i];
                 str[i] = t;
                 ok = true;
-            }
+            }else if(str[i])
         }
         if(!ok)
             break;
