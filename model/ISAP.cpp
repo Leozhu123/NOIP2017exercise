@@ -9,12 +9,7 @@ const int INF=(1<<31)-1;
 using namespace std;
 struct Edge{
     int from,to,cap,flow;
-    Edge(int from,int to,int cap){
-        this->from=from;
-        this->to=to;
-        this->cap=cap;
-        this->flow=0;
-    }
+    Edge(int from,int to,int cap):from(from),to(to),cap(cap),flow(0){}
 };
 struct ISAP{
     vector<Edge> edges;

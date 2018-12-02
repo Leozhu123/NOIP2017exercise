@@ -1,16 +1,15 @@
-#include <algorithm>
-#include <cctype>
-#include <climits>
-#include <cmath>
-#include <cstdio>
-#include <cstring>
 #include <iostream>
-#include <queue>
-#include <stack>
 #include <vector>
-#define LL long long
-#define P pair<int,int>
+#include <utility>
+#include <algorithm>
+#include <queue>
+#include <cstdio>
+#include <climits>
+#include <cctype>
 using namespace std;
+#define P pair<int,int>
+const int maxn = 10005;
+const int inf = (1 << 31) - 1;
 template <typename T>
 inline void read(T &t)
 {
@@ -29,8 +28,10 @@ inline void read(T &t, Args &... args)
     read(t);
     read(args...);
 }
-const int maxn = 5005;
-const int inf = (1 << 31) - 1;
+struct peo{
+    int t, l, r;
+};
+peo a[maxn];
 struct Edge{
     int from,to,cap,flow,cost;
     Edge(int from,int to,int cap,int cost){
@@ -114,21 +115,33 @@ struct MMMF{
             ;
     }
 };
+int n, m, K, i, ans = 0;
+int D[maxn], Mx[maxn], down[maxn], tim[maxn], S, T;
 int main(){
-    MMMF mmmf;
-    int n,m;
-    read(n,m);
-    for(int i=1;i<=n;i++){
-        int x;
-        read(x);
-        mmmf.addEdge(i, i + 1, INT_MAX - x, 0);
-    }
-    mmmf.addEdge(n + 2, 1, INT_MAX, 0);
+    read(n, m, K);
+    for(int i=1;i<n;i++)
+        read(D[i]);
     for(int i=1;i<=m;i++){
-        int u,v,w;
-        read(u, v, w);
-        mmmf.addEdge(u, v + 1, INT_MAX, w);
+        read(a[i].t, a[i].l, a[i].r);
+        down[a[i].r]++;
+        Mx[a[i].l] = max(Mx[a[i].l], a[i].t);
     }
-    mmmf.maxFlow(n+2,n+1,n+2);
-    cout << mmmf.mincost;
+    for (int i = 1;i<n;i++)
+        tim[i + 1] = max(tim[i], Mx[i]) + D[i];
+    for(int i=1;i<=m;i++){
+        ans += tim[a[i].r] - a[i].t;
+    }
+    S = n * 2 + 1;
+    T = n * 2 + 3;
+    int S1 = n * 2 + 2;
+    MMMF mmmf;
+    mmmf.addEdge(S, S1, K, 0);
+    for(int i=0;i<n;i++){
+        mmmf.addEdge(i, i + n, max(tim[i] - Mx[i], 0), 0);
+        mmmf.addEdge(i + n, i + 1, INT_MAX, -down[i + 1]);
+        mmmf.addEdge(S1, i + n, D[i], 0);
+        mmmf.addEdge(i + 1, T, INT_MAX, 0);
+    }
+    mmmf.maxFlow(S, T, 2 * n + 3);
+    printf("%d\n", ans + mmmf.mincost);
 }

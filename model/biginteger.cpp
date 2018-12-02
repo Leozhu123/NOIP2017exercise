@@ -6,36 +6,29 @@ class BigInteger{
     vector<int> num;
     int len = 0;
     public:
-    BigInteger() { num.push_back(0); }
-    BigInteger(long long x){
-        vector<int> tmp;
-        while(x){
-            tmp.push_back(x%10);
+    BigInteger(long long x = 0)
+    {
+        while (x)
+        {
+            num.push_back(x % 10);
             x /= 10;
         }
-        for(int i=tmp.size()-1;i>=0;i--){
-            num.push_back(tmp[i]);
-        }
-        for(int i=0;i<num.size();i++){
-            cout << num[i];
-        }
-        cout << endl;
     }
     BigInteger(string s){
-        for(int i=0;i<s.size();i++){
+        for(int i=s.size()-1;i>=0;i--){
             num.push_back(s[i]-'0');
         }
-        for(int i=0;i<num.size();i++){
-            cout << num[i];
-        }
-        cout << endl;
     }
     string tostring(){
         string ret;
-        for(int i=0;i<num.size();i++){
-            
+        for(int i=num.size()-1;i>=0;i--){
+            ret += (num[i] + '0');
         }
+        return ret;
+    }
+    BigInteger operator+(const BigInteger & l) {
+        BigInteger ret;
+        
     }
 };
-int main(){
-}
+int main(){}

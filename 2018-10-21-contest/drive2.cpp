@@ -1,10 +1,30 @@
 #include <algorithm>
 #include <iostream>
+#include <cstdio>
+#include <cctype>
 #define LL long long
 using namespace std;
-const int maxn = 200005;
+const int maxn = 100005;
 const int inf = (1 << 30);
 const int log_n = 25;
+template <typename T>
+inline void read(T &t)
+{
+    int f = 0, c = getchar();
+    t = 0;
+    while (!isdigit(c))
+        f |= c == '-', c = getchar();
+    while (isdigit(c))
+        t = t * 10 + c - 48, c = getchar();
+    if (f)
+        t = -t;
+}
+template <typename T, typename... Args>
+inline void read(T &t, Args &... args)
+{
+    read(t);
+    read(args...);
+}
 struct node
 {
     int pos, h;
@@ -61,7 +81,7 @@ int main()
 {
     freopen("drive.in","r",stdin);
     freopen("drive.out", "w", stdout);
-    cin >> n;
+    read(n);
     int tmp=1;
     while(tmp<=n/3){
         LOG++;
@@ -69,7 +89,7 @@ int main()
     }
     for (int i = 1; i <= n; i++)
     {
-        cin >> cities[i].h;
+        read(cities[i].h);
         h[i] = cities[i].h;
         cities[i].pos = i;
         cities[i].pre = cities[i].nxt = 0;
@@ -149,7 +169,7 @@ int main()
     }
     int mf1 = 0, mf2 = 1, mh = 0;
     int ans1 = 1;
-    cin >> x0 >> m;
+    read(x0, m);
     for (int i = 1; i <= n; i++)
     {
         LL f1 = 0, f2 = 0;
@@ -175,18 +195,18 @@ int main()
             mh = h[i];
         }
     }
-    cout << ans1 << endl;
+    printf("%d\n", ans1);
     for (int i = 1; i <= m; i++)
     {
         int Si, nSi;
         LL Xi;
-        cin >> Si >> Xi;
+        read(Si, Xi);
         nSi = Si;
         int mxl = getmx(Si, Xi);
         LL f1 = 0, f2 = 0;
         getdp(nSi, mxl, f1, f2);
         if (nxt2[nSi] && h2[nSi] + f1 + f2 <= Xi)
             f2 += h2[nSi];
-        cout << f2 << " " << f1 << endl;
+        printf("%d %d\n", f2, f1);
     }
 }

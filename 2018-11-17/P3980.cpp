@@ -115,20 +115,19 @@ struct MMMF{
     }
 };
 int main(){
-    MMMF mmmf;
-    int n,m;
-    read(n,m);
-    for(int i=1;i<=n;i++){
-        int x;
-        read(x);
-        mmmf.addEdge(i, i + 1, INT_MAX - x, 0);
-    }
-    mmmf.addEdge(n + 2, 1, INT_MAX, 0);
+    MMMF mmmf1;
+    MMMF mmmf2;
+    int n,m,k;
+    read(n, m, k);
     for(int i=1;i<=m;i++){
-        int u,v,w;
-        read(u, v, w);
-        mmmf.addEdge(u, v + 1, INT_MAX, w);
+        int u,v,c,w;
+        read(u,v,c,w);
+        mmmf1.addEdge(u, v, c, 0);
+        mmmf2.addEdge(u,v,c,0);
+        mmmf2.addEdge(u, v, INT_MAX, w);
     }
-    mmmf.maxFlow(n+2,n+1,n+2);
-    cout << mmmf.mincost;
+    mmmf1.maxFlow(1,n,n);
+    mmmf2.addEdge(n + 1, 1, mmmf1.maxflow + k, 0);
+    mmmf2.maxFlow(n+1,n,n+1);
+    cout << mmmf1.maxflow << " " << mmmf2.mincost;
 }

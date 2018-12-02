@@ -1,10 +1,10 @@
 #include <iostream>
 using namespace std;
-const int maxn = 1000005;
+const int maxn = 2000005;
 int rest[maxn],diff[maxn],need[maxn],d[maxn],l[maxn],r[maxn];
 int n, m;
 bool check(int x){
-    for(int i=1;i<n;i++){
+    for(int i=1;i<=n;i++){
         diff[i] = 0;
     }
     for (int i = 1; i <= x;i++){
@@ -13,7 +13,7 @@ bool check(int x){
     }
     need[0] = 0;
     for (int i = 1; i <= n;i++){
-        need[i] = need[i - 1] += diff[i];
+        need[i] = need[i - 1] + diff[i];
         if(need[i]>rest[i])
             return false;
     }

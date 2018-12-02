@@ -50,6 +50,7 @@ struct MMMF{
     bool inq[maxn];
     int n, s, t;
     void addEdge(int from,int to,int cap,int cost){
+//        cout << from << ' ' << to << " " << cap << " " << cost << endl;
         Edge e1(from,to,cap,cost),e2(to,from,0,-cost);
         edges.push_back(e1);
         edges.push_back(e2);
@@ -114,21 +115,35 @@ struct MMMF{
             ;
     }
 };
+int dx[2]={1,0};
+int dy[2] = {0, 1};
+int n,k;
+inline int f(int x, int y) {
+    return (x - 1) * n + y;
+}
+
 int main(){
     MMMF mmmf;
-    int n,m;
-    read(n,m);
-    for(int i=1;i<=n;i++){
-        int x;
-        read(x);
-        mmmf.addEdge(i, i + 1, INT_MAX - x, 0);
+    read(n,k);
+    int s = n * n * 2 + 1;
+    int t = n * n * 2 + 2;
+    mmmf.addEdge(s, 1, k, 0);
+    mmmf.addEdge(f(n,n)+n*n, t, k, 0);
+    for (int i = 1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            int x;
+            read(x);
+            mmmf.addEdge(f(i,j),f(i,j) + n * n,1,-x);
+            mmmf.addEdge(f(i,j),f(i,j) + n * n,INT_MAX,0);
+            for(int kkk=0;kkk<2;kkk++){
+                int x = i + dx[kkk];
+                int y = j + dy[kkk];
+                if(x>n || y>n)
+                    continue;
+                mmmf.addEdge(f(i,j) + n * n, f(x,y), INT_MAX, 0);
+            }
+        }
     }
-    mmmf.addEdge(n + 2, 1, INT_MAX, 0);
-    for(int i=1;i<=m;i++){
-        int u,v,w;
-        read(u, v, w);
-        mmmf.addEdge(u, v + 1, INT_MAX, w);
-    }
-    mmmf.maxFlow(n+2,n+1,n+2);
-    cout << mmmf.mincost;
+    mmmf.maxFlow(s,t,n*n*2+2);
+    cout << -mmmf.mincost;
 }
