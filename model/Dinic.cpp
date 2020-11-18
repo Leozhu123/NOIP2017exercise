@@ -1,3 +1,5 @@
+//by ciwomuli
+//AK JSOI 2019
 #include <algorithm>
 #include <cctype>
 #include <climits>
@@ -8,8 +10,9 @@
 #include <queue>
 #include <stack>
 #include <vector>
+#include <string>
+#include <sstream>
 #define LL long long
-#define P pair<int,int>
 using namespace std;
 template <typename T>
 inline void read(T &t)
@@ -29,81 +32,73 @@ inline void read(T &t, Args &... args)
     read(t);
     read(args...);
 }
-const int maxn = 10005;
+const int maxn = 1e4 + 4;
 struct Edge{
-    int from,to,cap,flow;
-    Edge(int from,int to,int cap):from(from),to(to),cap(cap),flow(0){}
+    int u,v,c,f;
+    Edge(int _u,int _v,int _c,int _f):u(_u),v(_v),c(_c),f(_f){}
 };
-struct Dinic{
-    vector<Edge> edge;
-    vector<int> map[maxn];
-    void addEdge(int from,int to,int cap){
-        Edge e1(from,to,cap);
-        Edge e2(to,from,0);
-        edge.push_back(e1);
-        edge.push_back(e2);
-        int m=edge.size();
-        map[from].push_back(m-2);
-        map[to].push_back(m-1);
+namespace Dinic{
+    vector<Edge> edges;
+    vector<int> G[maxn];
+    int d[maxn];
+    void ae(int u,int v,int f){
+        Edge e1(u,v,f,0),e2(v,u,0,0);
+        edges.push_back(e1);edges.push_back(e2);
+        int s = edges.size();
+        G[u].push_back(s-2);G[v].push_back(s-1);
     }
-    int d[maxn],cur[maxn],s,t;
-    bool vis[maxn];
+    int S,T;
     bool BFS(){
-    	memset(vis,0,sizeof(vis));
-    	memset(d,0,sizeof(d));
+        memset(d,0,sizeof(d));
+        d[S]=1;
         queue<int> q;
-        q.push(s);
-        d[s]=1;
-        vis[s]=true;
-        while (!q.empty()){
-            int x=q.front();
+        q.push(S);
+        while(!q.empty()){
+            int u = q.front();
             q.pop();
-            for (int i=0;i<map[x].size();i++){
-                Edge &e=edge[map[x][i]];
-                if (!vis[e.to] && e.cap>e.flow){
-                    d[e.to]=d[x]+1;
-                    vis[e.to]=true;
-                    q.push(e.to);
+            for(int i=0;i<G[u].size();i++){
+                Edge &e = edges[G[u][i]];
+                if(!d[e.v] && e.c > e.f){
+                    d[e.v] = d[u] + 1;
+                    q.push(e.v);
                 }
             }
-    	}
-        return vis[t];
+        }
+        return d[T];
     }
-    int DFS(int x,int a){
-        if (x==t || a==0) return a;
-        int flow=0,f;
-        for (int &i=cur[x];i<map[x].size();i++){
-            Edge &e=edge[map[x][i]];
-            if (d[e.to]==d[x]+1 && e.cap>e.flow &&(f=DFS(e.to,min(a,e.cap-e.flow)))>0){
-                flow+=f;
-                e.flow+=f;
-                edge[map[x][i]^1].flow-=f;
+    int DFS(int u,int a){
+        int ans = 0;
+        if(u == T || a <= 0) return a;
+        for(int i=0;i<G[u].size();i++){
+            Edge &e = edges[G[u][i]];
+            int f = 0;
+            if(d[e.v] == d[u] + 1 && e.c > e.f ){
+                f = DFS(e.v, min(a, e.c - e.f));
+                ans += f;
+                e.f+=f;
                 a-=f;
-                if (a==0) break;
+                edges[G[u][i]^1].f-=f;
+                if(a==0) break;
             }
         }
-        return flow;
+        return ans;
     }
-    int MaxFlow(int s,int t){
-        this->s=s;
-        this->t=t;
+    int maxflow(int s,int t){
+        S=s,T=t;
         int flow=0;
-        while (BFS()){
-            memset(cur,0,sizeof(cur));
-            flow+=DFS(s,INT_MAX);
+        while(BFS()){
+            flow += DFS(S,INT_MAX);
         }
         return flow;
-    }               
-};    
+    }
+}; // namespace Dinic
 int main(){
     int n,m,s,t;
-    Dinic maxflow;
     read(n, m, s, t);
     for (int i=0;i<m;i++){
         int a,b,c;
         read(a, b, c);
-        maxflow.addEdge(a,b,c);
+        Dinic::ae(a,b,c);
     }
-    cout<<maxflow.MaxFlow(s,t);
-}    
-    
+    cout<<Dinic::maxflow(s,t);
+}

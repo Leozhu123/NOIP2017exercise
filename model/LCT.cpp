@@ -2,216 +2,76 @@
 #include <iostream>
 using namespace std;
 const long long maxn = 10;
-long long da[maxn];
-struct SplayNode
-{
-	SplayNode *lch, *rch, *father, *path_parent;
-	long long idx, xo;
-	bool isRev;
-	SplayNode(long long idx)
-	{
-		lch = rch = father = path_parent = 0;
-		isRev = false;
-		xo = 0;
-		this->idx = idx;
-	}
-	inline void update()
-	{
-		xo = 0;
-		if (lch)
-			xo ^= lch->xo;
-		if (rch)
-			xo ^= rch->xo;
-		xo = xo ^ da[idx];
-	}
-	inline void pushdown()
-	{
-		if (isRev)
-		{
-			if (rch)
-				rch->isRev = !rch->isRev;
-			if (lch)
-				lch->isRev = !lch->isRev;
-			isRev = false;
-			SplayNode *t = lch;
-			lch = rch;
-			rch = t;
-		}
-		update();
-	}
-	inline void leftroute()
-	{
-		SplayNode *y = father;
-		path_parent = y->path_parent;
-		y->path_parent = 0;
-		y->rch = lch;
-		if (lch)
-		{
-			lch->father = y;
-		}
-		father = y->father;
-		if (y->father)
-		{
-			if (y == y->father->lch)
-				y->father->lch = this;
-			else
-				y->father->rch = this;
-		}
-		y->father = this;
-		lch = y;
-		y->update();
-		update();
-	}
-	inline void rightroute()
-	{
-		SplayNode *y = father;
-		path_parent = y->path_parent;
-		y->path_parent = 0;
-		y->lch = rch;
-		if (rch)
-		{
-			rch->father = y;
-		}
-		father = y->father;
-		if (y->father)
-		{
-			if (y == y->father->lch)
-				y->father->lch = this;
-			else
-				y->father->rch = this;
-		}
-		y->father = this;
-		rch = y;
-		y->update();
-		update();
-	}
-	inline void rev()
-	{
-		isRev = !isRev;
-		pushdown();
-	}
-};
-SplayNode *location[maxn];
-inline void splay(SplayNode *x)
-{
-	while (x->father)
-	{
-		SplayNode *father = x->father;
-		x->father->pushdown();
-		if (father->lch)
-			father->lch->pushdown();
-		if (father->rch)
-			father->rch->pushdown();
-		if (x == x->father->lch)
-		{
-			x->rightroute();
-		}
-		else
-		{
-			x->leftroute();
-		}
-	}
+const int maxn=300005;
+int fa[maxn],ch[maxn][2],s[maxn],v[maxn];
+int rev[maxn];
+inline int idon(int x){
+    if(x==ch[fa[x]][0]) return 0;
+    if(x==ch[fa[x]][1]) return 1;
+    return -1;
 }
-inline void Access(SplayNode *p)
-{
-	splay(p);
-	p->pushdown();
-	SplayNode *q = p->rch;
-	if (q)
-	{
-		p->rch = q->father = 0;
-		p->update();
-		q->path_parent = p;
-	}
-	p->pushdown();
-	for (q = p->path_parent; q; q = p->path_parent)
-	{
-		splay(q);
-		splay(p);
-		q->pushdown();
-		SplayNode *r = q->rch;
-		q->rch = p;
-		q->update();
-		q->father = 0;
-		if (r)
-		{
-			r->path_parent = q;
-			r->father = 0;
-		}
-		p->father = q;
-		p->path_parent = 0;
-		p = q;
-	}
-	splay(p);
+inline void update(int x){
+    s[x]=s[ch[x][0]]^s[ch[x][1]]^v[x];
 }
-inline SplayNode *FindRoot(SplayNode *p)
-{
-	Access(p);
-	splay(p);
-	p->pushdown();
-	while (p && p->lch)
-	{
-		p = p->lch;
-		p->pushdown();
-	}
-	splay(p);
-	p->pushdown();
-	return p;
+inline void pushd(int x){
+    if(rev[x]){
+        swap(ch[x][0],ch[x][1]);
+        rev[ch[x][0]]^=1;
+        rev[ch[x][1]]^=1;
+        rev[x]=0;
+    }
 }
-inline void Evert(SplayNode *p)
-{
-	Access(p);
-	splay(p);
-	p->rev();
-	p->pushdown();
+inline void rotate(int x){
+    int y=fa[x],d=idon(x);
+    if(idon(y)!=-1) ch[fa[y]][idon(y)]=x;
+    fa[x]=fa[y];
+    ch[y][d]=ch[x][d^1];fa[ch[y][d]]=y;
+    ch[x][d^1]=y;fa[y]=x;
+    update(y);
+    update(x);
 }
-inline void Cut(SplayNode *p, SplayNode *q)
-{
-	Evert(p);
-	Access(q);
-	splay(q);
-	q->pushdown();
-	if (q->lch==p)
-		q->lch->father = 0;
-	q->lch = 0;
-	q->update();
+void mt(int x){
+    if(idon(x)!=-1) mt(fa[x]);
+    pushd(x);
 }
-inline void Link(SplayNode *p, SplayNode *q)
-{
-	Evert(p);
-	splay(p);
-	p->pushdown();
-	Access(q);
-	splay(q);
-	q->pushdown();
-	p->lch = q;
-	p->update();
-	q->father = p;
-	q->path_parent = 0;
-	p->pushdown();
+inline void splay(int x){
+    mt(x);
+    while(idon(x)!=-1) rotate(x);
 }
-inline void MakeTree(long long idx)
-{
-	SplayNode *p = new SplayNode(idx);
-	location[idx] = p;
-	p->xo = da[idx];
+inline void access(int x){
+    for(int y=0;x;y=x,x=fa[x]){
+        splay(x);
+        ch[x][1]=y;
+        update(x);
+    }
+} 
+inline void mkrt(int x){
+    access(x);
+    splay(x);
+    rev[x]^=1;
+    pushd(x);
 }
-inline long long ask(SplayNode *p, SplayNode *q)
-{
-	Evert(p);
-	splay(p);
-	p->pushdown();
-	Access(q);
-	splay(q);
-	q->pushdown();
-	return q->xo;
+inline int frt(int x){
+    access(x);
+    splay(x);
+    while(ch[x][0]) x=ch[x][0];
+    return x;
 }
-inline void change(long long idx, long long x)
-{
-	da[idx] = x;
-	SplayNode *cur = location[idx];
-	splay(cur);
-	cur->update();
+inline void split(int x,int y){
+    mkrt(x);
+    access(y);
+    splay(y);
+}
+inline void link(int x,int y){
+    mkrt(x);
+    if(frt(y)!=x) fa[x]=y;
+}
+inline void cut(int x,int y){
+    mkrt(x);
+    if(frt(y)==x && fa[x]==y && !ch[x][1]){
+        fa[x]=ch[y][0]=0;
+        update(y);
+    }
 }
 int main()
 {
